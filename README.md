@@ -15,13 +15,12 @@ Suitable for Node-red serial port.
 The RFM01 can work on 5v directly.
 
 #Pinout
-RFM RESET - Arduino 8
-RFM NFFS  - Arduino 9
-RFM NSET  - Arduino 10
-
-RFM FFIT - Arduino 12
-RFM SDI  - Arduino 11
-RFM SCK  - Arduino 13
+* RFM RESET - Arduino 8
+* RFM NFFS  - Arduino 9
+* RFM NSET  - Arduino 10
+* RFM FFIT - Arduino 12
+* RFM SDI  - Arduino 11
+* RFM SCK  - Arduino 13
 
 10k pull-up on RESET and NSET.
 
