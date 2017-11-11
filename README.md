@@ -10,6 +10,7 @@ Suitable for Node-red serial port.
 
 ![100koll LCD unit](100koll_lcd.jpg)
 ![100koll LCD unit](plug.jpg)
+![100koll LCD unit](arduino_with_radio.jpg)
 
 # RFM01
 The RFM01 can work on 5v directly.
