@@ -96,15 +96,14 @@ void parse(uint8_t data[8]){
   uint8_t pairing               = (data[0] & 0x80) ? 0x01 : 0x00;
   uint8_t data_sensor_indicator = (data[0] & 0x40) ? 0x01 : 0x00;
   uint16_t address = (data[0] & 0x0F)<< 8 | data[1];
-
-  uint8_t sensor_valid[3];
-  uint8_t sensor_value[3];
-  
+  uint8_t i;
   
   
   if(data_sensor_indicator == 0x00){
       /* Electricity data */
- 
+      uint8_t sensor_valid[3];
+      uint8_t sensor_value[3];
+  
       /* sensor 1 */
       sensor_valid[0] = data[2] & 0x80;                   //sensor valid
       sensor_value[0] =(data[2]<<8 | data[3]) & 0x7FFFu;  //15 bit value
@@ -124,7 +123,7 @@ void parse(uint8_t data[8]){
       Serial.print(address);
       Serial.print("");
       /* print out valid sensors */
-      for(uint8_t i=0;i<3;i++){
+      for(i=0;i<3;i++){
         if(sensor_valid[i] != 0u){
           Serial.print(",\"power");
           Serial.print(i);
@@ -134,7 +133,36 @@ void parse(uint8_t data[8]){
       }
       Serial.println("}");
   }else{
-      /* Electricity Counter data */
+    uint8_t sensor_type = data[3];
+    uint32_t counter = 0u;
+
+    for(i=0;i<4;i++){
+      counter <<= 8;
+      counter |= data[4+i];
+    }
+
+    /* Sensor types: 2:Electric, 3:Gas, 4:water */
+    if(sensor_type == 2 || sensor_type == 3 || sensor_type == 4){
+      Serial.print("{");
+      Serial.print("\"timestamp\":");
+      Serial.print(millis());
+      Serial.print(",\"sensor\":");
+      Serial.print(address);
+      Serial.print("");
+
+      if(sensor_type == 2){
+        Serial.print(",\"electric\":");
+      }else if(sensor_type == 3){
+        Serial.print(",\"gas\":");
+      }else if(sensor_type == 3){
+        Serial.print(",\"water\":");
+      }
+
+      Serial.print(counter);
+      Serial.println("}");
+
+    }
+      
   }
 }
 
