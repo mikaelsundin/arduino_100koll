@@ -100,37 +100,42 @@ void parse(uint8_t data[8]){
   uint8_t sensor_valid[3];
   uint8_t sensor_value[3];
   
-  /* sensor 1 */
-  sensor_valid[0] = data[2] & 0x80;                   //sensor valid
-  sensor_value[0] =(data[2]<<8 | data[3]) & 0x7FFFu;  //15 bit value
-
-  /* sensor 2 */
-  sensor_valid[1] = (data[4] & 0x80);                 //sensor valid
-  sensor_value[1] = (data[4]<<8 | data[5]) & 0x7FFFu; //15 bit value
-
-  /* sensor 3 */
-  sensor_valid[2] = (data[6] & 0x80);                 //sensor valid
-  sensor_value[2] = (data[6]<<8 | data[7]) & 0x7FFFu; //15 bit value
-
-
   
+  
+  if(data_sensor_indicator == 0x00){
+      /* Electricity data */
+ 
+      /* sensor 1 */
+      sensor_valid[0] = data[2] & 0x80;                   //sensor valid
+      sensor_value[0] =(data[2]<<8 | data[3]) & 0x7FFFu;  //15 bit value
 
-  Serial.print("{");
-  Serial.print("\"timestamp\":");
-  Serial.print(millis());
-  Serial.print(",\"sensor\":");
-  Serial.print(address);
-  Serial.print("");
-  /* print out valid sensors */
-  for(uint8_t i=0;i<3;i++){
-    if(sensor_valid[i] != 0u){
-      Serial.print(",\"power");
-      Serial.print(i);
-      Serial.print("\":");
-      Serial.print(sensor_value[i]);
-    }
+      /* sensor 2 */
+      sensor_valid[1] = (data[4] & 0x80);                 //sensor valid
+      sensor_value[1] = (data[4]<<8 | data[5]) & 0x7FFFu; //15 bit value
+
+      /* sensor 3 */
+      sensor_valid[2] = (data[6] & 0x80);                 //sensor valid
+      sensor_value[2] = (data[6]<<8 | data[7]) & 0x7FFFu; //15 bit value
+
+      Serial.print("{");
+      Serial.print("\"timestamp\":");
+      Serial.print(millis());
+      Serial.print(",\"sensor\":");
+      Serial.print(address);
+      Serial.print("");
+      /* print out valid sensors */
+      for(uint8_t i=0;i<3;i++){
+        if(sensor_valid[i] != 0u){
+          Serial.print(",\"power");
+          Serial.print(i);
+          Serial.print("\":");
+          Serial.print(sensor_value[i]);
+        }
+      }
+      Serial.println("}");
+  }else{
+      /* Electricity Counter data */
   }
-  Serial.println("}");
 }
 
 /* Decode incomming manchester packet */
